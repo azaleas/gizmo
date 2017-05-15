@@ -1,0 +1,31 @@
+{% extends "_base.html" %}
+{% block title %}
+    Login
+{% endblock title %}
+
+{% block content %}
+    <h1>Login</h1>
+    {% if form.errors %}
+        <p class="ui message error">Username/Password didnt match. <a href="{% url "account:login" %}">Try again</a></p>
+    {% else %}
+    <div class="login-form">
+        <form 
+            class="ui form" 
+            action="." 
+            method="post">
+            {% csrf_token %}
+            <label for="username">Username</label>
+            {{ form.username }}
+            <label for="password">Password</label>
+            {{ form.password }}
+            <input type="hidden" name="next" value="{{ next }}">
+            <p><input 
+                type="submit" 
+                value="Login" 
+                class="ui button green"></p>  
+        </form>
+    <p><a href="{% url "account:password_reset" %}">Forgot your password?</a></p>
+    <p>Don't have an account yet? <a href="{% url "account:register" %}">Register.</a></p>
+    </div>
+    {% endif %}
+{% endblock content %}

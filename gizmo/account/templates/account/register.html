@@ -1,0 +1,60 @@
+{% extends "_base.html" %}
+{% block title %}
+    Create account
+{% endblock title %}
+
+{% block content %}
+    <h1>Create account</h1>
+    {% if user_form.non_field_errors %}
+        <div class="ui message error">
+            {{ user_form.non_field_errors }}
+        </div>
+    {% endif %}
+    <form 
+        class="ui form"
+        action="." 
+        method="post">
+        {% csrf_token %}
+        <div class="field">
+            <label for="{{ user_form.username.id_for_label }}">{{ user_form.username.label }}</label>
+            {{ user_form.username }}
+            {% if user_form.username.errors %}
+                <div class="ui message error">
+                    {{ user_form.username.errors }}
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="field">
+            <label for="{{ user_form.email.id_for_label }}">{{ user_form.email.label }}</label>
+            {{ user_form.email }}
+            {% if user_form.email.errors %}
+                <div class="ui message error">
+                    {{ user_form.email.errors }}
+                </div>
+            {% endif %}
+        </div>
+        <div class="field">
+            <label for="{{ user_form.password.id_for_label }}">{{ user_form.password.label }}</label>
+            {{ user_form.password }}
+            {% if user_form.password.errors %}
+                <div class="ui message error">
+                    {{ user_form.password.errors }}
+                </div>
+            {% endif %}
+        </div>
+        <div class="field">
+            <label for="{{ user_form.password2.id_for_label }}">{{ user_form.password2.label }}</label>
+            {{ user_form.password2 }}
+            {% if user_form.password2.errors %}
+                <div class="ui message error">
+                    {{ user_form.password2.errors }}
+                </div>
+            {% endif %}
+        </div>
+        <p><input 
+            class="ui button green" 
+            type="submit" 
+            value="Create account"></p>
+    </form>
+{% endblock content %}

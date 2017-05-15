@@ -1,0 +1,11 @@
+.ui.form .error.message, 
+.ui.form .success.message, 
+.ui.form .warning.message{
+    display: block;
+}
+form ul {
+    padding: 0;
+}
+form ul li {
+    list-style: none
+}

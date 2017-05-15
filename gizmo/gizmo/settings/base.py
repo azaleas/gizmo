@@ -13,12 +13,16 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 import json
 import os
 import sys
+from django.core.urlresolvers import reverse_lazy
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 ALLOWED_HOSTS = []
 
+LOGIN_REDIRECT_URL = reverse_lazy('account:dashboard')
+LOGIN_URL = reverse_lazy('account:login')
+LOGOUT_URL = reverse_lazy('account:logout')
 
 # Application definition
 
@@ -49,7 +53,7 @@ ROOT_URLCONF = 'gizmo.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates'), ],
+        'DIRS': [os.path.join(BASE_DIR, 'templates'), 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

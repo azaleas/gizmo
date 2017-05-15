@@ -19,6 +19,8 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^ga60_admin/', admin.site.urls),
+    url(r'', include('account.urls', 
+        namespace = 'account', app_name = 'account')),
 ]
 
 if settings.DEBUG:
