@@ -18,6 +18,8 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASS')
 DEFAULT_FROM_EMAIL = os.environ.get('EMAIL_USER')
 SERVER_EMAIL = os.environ.get('EMAIL_USER')
 
+AUTHY_API_KEY = os.environ.get('AUTHY_API_KEY')
+
 # Database
 
 # Heroku: Update database configuration from $DATABASE_URL.

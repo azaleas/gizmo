@@ -21,16 +21,16 @@
             {% endif %}
         </div>
     </header>
-    {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-                <li class="{{ message.tags }}">
-                    {{ message|safe }}
-                </li>
-            {% endfor %}
-        </ul>
-    {% endif %}
     <div id="content" class="ui container segment">
+        {% if messages %}
+            <ul class="ui message error">
+                {% for message in messages %}
+                    <li class="{{ message.tags }}">
+                        {{ message|safe }}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
         {% block content %}
             
         {% endblock content %}

@@ -6,6 +6,6 @@
 form ul {
     padding: 0;
 }
-form ul li {
+form ul li, ul.error li {
     list-style: none
 }

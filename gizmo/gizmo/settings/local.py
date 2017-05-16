@@ -40,6 +40,8 @@ SECRET_KEY = get_secret('SECRET_KEY', DEBUG)
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = 1025
 
+AUTHY_API_KEY = get_secret('AUTHY_API_KEY', DEBUG)
+
 #########################################################
 # Activate django-debug-toolbar if it is installed
 #########################################################
