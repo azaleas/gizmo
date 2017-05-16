@@ -2,16 +2,25 @@ header {
     margin: 1em 0;
 }
 
+#content {
+    max-width: 700px !important;
+}
+
 .ui.form .error.message, 
 .ui.form .success.message, 
 .ui.form .warning.message{
     display: block;
 }
+
 form ul {
     padding: 0;
 }
 form ul li, ul.error li {
     list-style: none
+}
+
+.ui.form select {
+    width: 100% !important;
 }
 
 .onetouch--loader {

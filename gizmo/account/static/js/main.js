@@ -3,6 +3,10 @@ $(document).ready(function(){
     if(onetouchLoader.length){
         checkStatus();
     }
+    $('.message .close').on('click', function() {
+        $(this).closest('.message').transition('fade')
+        ;
+    });
 });
 
 function checkStatus(){

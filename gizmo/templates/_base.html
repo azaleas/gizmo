@@ -24,6 +24,7 @@
     <div id="content" class="ui container segment">
         {% if messages %}
             <ul class="ui message error">
+                <i class="close icon"></i>
                 {% for message in messages %}
                     <li class="{{ message.tags }}">
                         {{ message|safe }}

@@ -2,8 +2,11 @@
 
 {% block content %}
     <h1>Verify SoftToken Code</h1>
-    {% if user_auth_id|length > 0 and remove_success_message < 1 %}
-        <p class="ui message green">SoftToken was sent. You will receive an SMS with one time verification code if you don't have Authy App.</p>
+    {% if user_auth_id and remove_success_message < 1 %}
+        <p class="ui message green">
+            <i class="close icon"></i>
+            SoftToken was sent. You will receive an SMS with one time verification code if you don't have Authy App.
+        </p>
     {% endif %}
     {% if user_form.non_field_errors %}
         <div class="ui message error">
