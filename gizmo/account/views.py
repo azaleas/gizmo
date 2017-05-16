@@ -13,7 +13,6 @@ from django.contrib.auth.models import User
 from django.views.decorators.http import require_http_methods
 from django.http import HttpResponse
 
-
 from authy.api import AuthyApiClient
 
 from .forms import UserRegistrationForm, ProfileForm, VerifySMSForm
@@ -28,11 +27,12 @@ api_uri = client.api_uri
 
 @login_required
 def dashboard(request):
+
     return render(
         request,
         'account/dashboard.html',
         {
-            'section': 'dashboard',
+
         }
     )
 
