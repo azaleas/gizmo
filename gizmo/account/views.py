@@ -10,6 +10,9 @@ from django.contrib.auth import authenticate, login
 from django.views.generic import TemplateView, FormView
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
+from django.views.decorators.http import require_http_methods
+from django.http import HttpResponse
+
 
 from authy.api import AuthyApiClient
 
@@ -21,6 +24,7 @@ def get_authy_client():
     return AuthyApiClient(settings.AUTHY_API_KEY)
 
 client = get_authy_client()
+api_uri = client.api_uri
 
 @login_required
 def dashboard(request):
@@ -97,33 +101,48 @@ class LoginView(FormView):
 
         user = authenticate(username=form.cleaned_data['username'], 
                             password=form.cleaned_data['password'])
-
+        try:
+            auth_method = self.request.POST['select_auth']
+        except:
+            auth_method = "token"
         if user:
             authy_id = user.profile.authy_id
-            api_uri = client.api_uri
-            url = '{0}/onetouch/json/users/{1}/approval_requests'.format(api_uri, authy_id)       
-            data = {
-                'api_key': client.api_key,
-                'message': "Request to login to Gizmo app",
-                'details[Email': user.email
-            }
-            response = requests.post(url, data=data)
-            json_response = response.json()
+            if auth_method == 'onetouch':
+                """
+                Check if user has a device attached. If not, send an sms
+                """
+                url = '{0}/onetouch/json/users/{1}/approval_requests'.format(api_uri, authy_id)       
+                data = {
+                    'api_key': client.api_key,
+                    'message': "Request to login to Gizmo app",
+                    'details[Email': user.email
+                }
+                response = requests.post(url, data=data)
+                json_response = response.json()
 
-            if 'approval_request' in json_response:
-                pass
-            else:
+                if 'approval_request' in json_response:
+                    self.request.session['user_auth_id'] = authy_id
+                    self.request.session['uuid'] = json_response.get('approval_request').get('uuid')
+                    return redirect('/verify-onetouch')
+                else:
+                    """
+                    Send the verification code with sms 
+                    """
+                    sms = client.users.request_sms(authy_id)
+        
+            elif auth_method == 'token':
                 """
                 Send the verification code with sms 
                 """
                 sms = client.users.request_sms(authy_id)
-                if sms.ok():
-                    self.request.session['user_auth_id'] = authy_id
-                    return redirect('/verify-sms')
-                else:
-                    errors = sms.errors()
-                    messages.add_message(self.request, messages.ERROR, errors.get('message'))
-                    return redirect('/login')
+            
+            if sms.ok():
+                self.request.session['user_auth_id'] = authy_id
+                return redirect('/verify-sms')
+            else:
+                errors = sms.errors()
+                messages.add_message(self.request, messages.ERROR, errors.get('message'))
+                return redirect('/login')
 
             print('JSON Response:\n', json_response)
 
@@ -186,4 +205,40 @@ class VerifySMS(FormView):
 
         else:
             return redirect('/login')    
-    
+
+@require_http_methods(['GET'])
+def verifyOnetouch(request):
+    if request.user.is_authenticated:
+        return redirect('/')
+    try:
+        if request.session['uuid']:
+            return render(
+                request,
+                'account/verify-onetouch.html',
+                {
+                    
+                }
+            )
+    except:
+        return redirect('/')
+
+@require_http_methods(['GET'])
+def authy_check(request):
+    if request.is_ajax():
+        uuid = request.session['uuid']
+        authy_id = request.session['user_auth_id']
+        url = '{0}/onetouch/json/approval_requests/{1}?api_key={2}'.format(api_uri, uuid, settings.AUTHY_API_KEY)       
+        response = requests.get(url)
+        response_json = response.json()
+        try:
+            if response_json.get('approval_request').get('status') == "approved":
+                authy_id = response_json.get('approval_request').get('_authy_id')
+                user = User.objects.get(profile__authy_id=authy_id)
+                login(request, user)
+                return HttpResponse('approved')
+            elif response_json.get('approval_request').get('status') == "denied":
+                return HttpResponse('denied')
+            else:
+                return HttpResponse('pending')
+        except:
+            return HttpResponse('pending')

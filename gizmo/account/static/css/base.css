@@ -9,3 +9,8 @@ form ul {
 form ul li, ul.error li {
     list-style: none
 }
+
+.onetouch--loader {
+    height: 10%;
+    height: 10vh;
+}

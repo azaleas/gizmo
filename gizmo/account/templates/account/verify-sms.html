@@ -1,12 +1,9 @@
 {% extends "_base.html" %}
-{% block title %}
-    Create account
-{% endblock title %}
 
 {% block content %}
-    <h1>Verify SMS Code</h1>
+    <h1>Verify SoftToken Code</h1>
     {% if user_auth_id|length > 0 and remove_success_message < 1 %}
-        <p class="ui message green">One time verification SMS was sent. It will be active for 10 minutes.</p>
+        <p class="ui message green">SoftToken was sent. You will receive an SMS with one time verification code if you don't have Authy App.</p>
     {% endif %}
     {% if user_form.non_field_errors %}
         <div class="ui message error">
@@ -19,7 +16,7 @@
         method="post">
         {% csrf_token %}
         <div class="field">
-            <label for="{{ form.sms_password.id_for_label }}">{{ form.sms_password.label }}</label>
+            <label for="{{ form.sms_password.id_for_label }}">Sms/SoftToken</label>
             {{ form.sms_password }}
             {% if form.sms_password.errors %}
                 <div class="ui message error">

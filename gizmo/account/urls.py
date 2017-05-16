@@ -7,6 +7,8 @@ urlpatterns = [
     url(r'^$', views.dashboard, name = 'dashboard'),
     url(r'^login/$', views.LoginView.as_view(), name = 'login'),
     url(r'^verify-sms/$', views.VerifySMS.as_view(), name = 'verify'),
+    url(r'^verify-onetouch/$', views.verifyOnetouch, name = 'verify-onetouch'),
+    url(r'^authy-check/$', views.authy_check, name = 'authy-check'),
     url(r'^logout/$', auth_views.LogoutView.as_view(), name = 'logout'),
     url(r'^logout/$', auth_views.logout, name = 'logout'),
     url(r'^logout-then-login/$', auth_views.logout_then_login, 

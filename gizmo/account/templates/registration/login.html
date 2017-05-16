@@ -1,8 +1,4 @@
 {% extends "_base.html" %}
-{% block title %}
-    Login
-{% endblock title %}
-
 {% block content %}
     <h1>Login</h1>
     {% if form.errors %}
@@ -14,10 +10,21 @@
             action="." 
             method="post">
             {% csrf_token %}
-            <label for="username">Username</label>
-            {{ form.username }}
-            <label for="password">Password</label>
-            {{ form.password }}
+            <div class="field">
+                <label for="username">Username</label>
+                {{ form.username }}
+            </div>
+            <div class="field">
+                <label for="password">Password</label>
+                {{ form.password }}
+            </div>
+            <div class="field">
+                <label for="select_auth">OneTouch/SoftToken</label>
+                <select name="select_auth" id="select_auth">
+                    <option value="onetouch">OneTouch</option>
+                    <option value="token">SoftToken</option>
+                </select>
+            </div>
             <input type="hidden" name="next" value="{{ next }}">
             <p><input 
                 type="submit" 
