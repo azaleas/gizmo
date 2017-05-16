@@ -1,3 +1,7 @@
+header {
+    margin: 1em 0;
+}
+
 .ui.form .error.message, 
 .ui.form .success.message, 
 .ui.form .warning.message{
