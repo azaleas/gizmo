@@ -56,7 +56,6 @@ def register(request):
                 user = authenticate(username=user_form.cleaned_data['username'],
                                     password=user_form.cleaned_data['password']
                                 )
-
                 new_profile = profile_form.save(commit = False)
                 new_profile.user = user
                 new_profile.authy_id = authy_user.id
@@ -98,7 +97,6 @@ class LoginView(FormView):
             return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
-
         user = authenticate(username=form.cleaned_data['username'], 
                             password=form.cleaned_data['password'])
         try:
