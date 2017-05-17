@@ -38,13 +38,11 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # https://warehouse.python.org/project/whitenoise/
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
-PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
-
 # Templates
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates'), os.path.join(PROJECT_DIR, 'templates'), 'templates'],
+        'DIRS': [os.path.join(BASE_DIR, 'templates'), os.path.join(BASE_DIR, '../templates'), 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
