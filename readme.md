@@ -116,7 +116,7 @@ Production:
 
 For admin url, check urls.py file. 
 
-For [heroku demo](https://gizmoapp.herokuapp.com) app uses free Authy plan, so there will be a daily limitation for SMSs. 
+For [heroku demo](https://gizmoapp.herokuapp.com), app uses free Authy plan, so there will be a daily limitation for SMSs. 
 
 #### Tests:
  - account/tests - for Business Logic tests on Django. External api requests for authy-python were mocked.
