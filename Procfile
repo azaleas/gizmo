@@ -1,0 +1,1 @@
+web: gunicorn --pythonpath voting_app voting_app.wsgi --log-file -
