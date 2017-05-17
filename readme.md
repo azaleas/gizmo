@@ -7,7 +7,7 @@ Built with:
 
  - **Django**
  - **authy-python**
- - **jQuery** (Mainly for Semantic UI funcionality and some AJAX Requests)
+ - **jQuery** (Mainly for Semantic UI functionality and some AJAX Requests)
  - **Semantic UI** (For fast front end prototyping)
 
 Hosted on [heroku](https://gizmoapp.herokuapp.com).
@@ -45,7 +45,8 @@ For all user authentications **accounts app** was created.
 **Simple user sign up and sign in**
 
 For the first two user cases (simple sign up and sign in) default Django authentication system was used. The code is available on **"localdev_standart_django_auth"** branch. 
-For authentication, Django provides certain [views](https://docs.djangoproject.com/en/1.11/topics/auth/default/#all-authentication-views) and templates for this views, which can be overridden. Template overrides for this views were created in account app. Django also provides the forms for Login, Register, Password Reset/Change actions.
+For authentication, Django provides certain [views](https://docs.djangoproject.com/en/1.11/topics/auth/default/#all-authentication-views) and templates for this views, which can be overridden. Template overrides for this views were created in account app. Django also provides the forms for Login, Register, Password Reset/Change actions. User passwords use [PBKDF2](https://docs.djangoproject.com/en/1.11/topics/auth/passwords/#password-management-in-django) by default
+in Django.
 
 **Authentication via SoftToken**
 
@@ -57,26 +58,26 @@ LoginView tests if user selected softtoken/sms or onetouch. Before proceeding wi
 
 **Authentication via OneTouch**
 
-LoginView first tests if user has a device enabled by sending a request to authy API. if user doesn't have enabled device with Authy app installed, then authentication falls back to sms/softtoken. If user has Authy app, then authy_id and uuid (returned back from API call) are saved in session and user gets redirected to verify-onetouch page. This page uses AJAX to test if user approved/denied the Authy request on the device. To send and verify the Authy approval, authy_check view was created. It sends a GET request to authy API and checks if the returned response has appropriate status message. Three actions are made according to status message:
+LoginView first tests if user has a enabled device with Authy app, by sending a request to authy API. if user doesn't have enabled device with Authy app installed, then authentication falls back to sms/softtoken. If user has Authy app, then authy_id and uuid (returned back from API call) are saved in session and user gets redirected to **verify-onetouch** page. This page uses AJAX to test if user approved/denied the Authy request on the device. To verify the Authy approval, **authy_check** view was created. It sends a GET request to authy API and checks if the returned response has appropriate status message. Three actions are made depending on the returned status message:
 
- - status == "denied" - Alert box alerts the user that Request was denied and gets redirerted to Login Page.
+ - status == "denied" - Alert box alerts the user that Request was denied and user gets redirerted to Login Page.
  - status == "pending" - AJAX call receives "pending" as a response and after short period of time sends a new AJAX call. AJAX calls are sent using setTimeout, until "denied" or "approved" is returned as a response. 
  - status == "approved" - User gets logged in by authy_check view and then user is redirected to dashboard page.
 
  **Logout**
 
- Logout flushes all the caches and logs out the user redirects to Log out page. It uses the Django default authentication system.
+ Logout flushes all the caches and logs out the user and redirects to Log out page. It uses the Django default authentication system. Overriden logout template is created inside account app.
 
 ----------
 
 #### Local Tests and Heroku demo:
 
-For Authy OneTouch/SoftToken tests, Authy Chrome App was used. 
+For Authy OneTouch/SoftToken tests, **Authy Chrome App** was used. 
 
 **For Local Setup:**
 
 - Install requirements from requirements/local.txt
- - whitenoise can be uninstalled if it's not required (it's recommended for heroku). Also, clear up wsgi.py to avoid any issuse:
+ - whitenoise can be uninstalled if it's not required (it's recommended for heroku). Also, clear up wsgi.py to avoid any issues:
 ```
 import os
 
@@ -94,8 +95,7 @@ application = DjangoWhiteNoise(application)
 ```
 - Create a secrets.json file(rename secrets.json.example) and fill in the required keys and values.
 
-- To test emails, **python -m smtpd -n -c DebuggingServer localhost:1025
-** can be run on a separate console. Port and host definitions are set in local.py.
+- To test emails, **python -m smtpd -n -c DebuggingServer localhost:1025** can be run on a separate console. Port and host definitions are set in local.py.
 
 **For Production Setup:**
 
@@ -116,20 +116,20 @@ Production:
 
 For admin url, check urls.py file. 
 
-For [heroku demo](https://gizmoapp.herokuapp.com). App uses free Authy plan, so there will be a daily limitation for SMSs. 
+For [heroku demo](https://gizmoapp.herokuapp.com) app uses free Authy plan, so there will be a daily limitation for SMSs. 
 
 #### Tests:
  - account/tests - for Business Logic tests on Django. External api requests for authy-python were mocked.
 
 #### Front End Prototyping
 
-UX/UI wasn't the main concern for this project, so for fast frontend prototyping [Semantic UI](https://semantic-ui.com) framework was used. This framework also requires [jQuery](http://jquery.com), so that's why jQuery was also used to make the AJAX requests. All the external css and js files are called from [cdnjs.com](https://cdnjs.com). 
+UX/UI wasn't the main concern for this project, so for the fast frontend prototyping [Semantic UI](https://semantic-ui.com) framework was used. This framework also requires [jQuery](http://jquery.com), so that's why jQuery was also used to make the AJAX requests. All the external css and js files are called from [cdnjs.com](https://cdnjs.com). 
 
 ----------
 
 #### Overall Results and Docs
 All user cases were achieved. The App was built on Windows OS and demo app is hosted on Heroku(with free tier option). Authy-python library was a great help. The PyPi version didn't support python 3, so it was installed from Github. I had some issues with Django Debug Toolbar while creating the tests. That's why a separate settings file for tests was created in settings folder.
-Further code refactoring can be made to reduce the repetitive code. Also, CSS can be rewritten to avoid big CSS file of Semantic UI. For js part, jQuery can be replaced with ZeptoJS. 
+Further code refactoring can be made to reduce the repetitive code. Also, CSS can be rewritten to avoid big CSS file of Semantic UI. For js part, jQuery can be replaced with ZeptoJS or with native JavaScript ES6 (for AJAX calls fetch api or axios can be used)
 
 The app was created thanks to this literature:
 
